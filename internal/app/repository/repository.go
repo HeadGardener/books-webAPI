@@ -1,16 +1,25 @@
 package repository
 
-type Authentication interface {
+import (
+	"github.com/HeadGardener/books-webAPI/internal/app/models"
+	"github.com/jmoiron/sqlx"
+)
+
+type Authorization interface {
+	CreateUser(user models.User) (int, error)
+	GetUser(userInput models.UserInput) (models.User, error)
 }
 
 type BookInterface interface {
 }
 
 type Repository struct {
-	Authentication
+	Authorization
 	BookInterface
 }
 
-func NewRepository() *Repository {
-	return &Repository{}
+func NewRepository(db *sqlx.DB) *Repository {
+	return &Repository{
+		Authorization: NewAuthPostgres(db),
+	}
 }

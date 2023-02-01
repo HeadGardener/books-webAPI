@@ -14,7 +14,7 @@ func main() {
 		logrus.Fatalf("error occured while initialize config: %s", err.Error())
 	}
 
-	_, err := repository.NewDB(repository.Config{
+	db, err := repository.NewDB(repository.Config{
 		Host:    viper.GetString("db.host"),
 		DBName:  viper.GetString("db.dbname"),
 		SSLMode: viper.GetString("db.sslmode"),
@@ -23,7 +23,7 @@ func main() {
 		logrus.Fatalf("failing while connecting to db: %s", err.Error())
 	}
 
-	repos := repository.NewRepository()
+	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handler := handlers.NewHandler(services)
 

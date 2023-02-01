@@ -6,6 +6,12 @@ import (
 	_ "github.com/lib/pq"
 )
 
+const (
+	UsersTable      = "users"
+	BooksTable      = "books"
+	UsersBooksTable = "users_books"
+)
+
 type Config struct {
 	Host    string
 	DBName  string

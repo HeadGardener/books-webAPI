@@ -1,14 +1,19 @@
 package models
 
 type User struct {
-	ID       string `json:"id"`
-	Name     string `json:"name"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	ID       int    `json:"-" db:"id"`
+	Name     string `json:"name" binding:"required"`
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type UsersBooks struct {
-	ID     string `json:"id"`
-	UserID string `json:"user_id"`
-	BookID string `json:"book_id"`
+	ID     int `json:"id"`
+	UserID int `json:"user_id"`
+	BookID int `json:"book_id"`
+}
+
+type UserInput struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
