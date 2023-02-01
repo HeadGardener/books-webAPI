@@ -1,0 +1,6 @@
+port: "8080"
+
+db:
+  host: "localhost"
+  dbname: "books-api"
+  sslmode: "disable"
