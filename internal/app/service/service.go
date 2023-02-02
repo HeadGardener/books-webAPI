@@ -12,6 +12,7 @@ type Authorization interface {
 }
 
 type BookInterface interface {
+	CreateBook(userID int, book models.Book) (int, error)
 }
 
 type Service struct {
@@ -22,5 +23,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos),
+		BookInterface: NewBookService(repos),
 	}
 }
