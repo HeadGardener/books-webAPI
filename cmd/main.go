@@ -1,12 +1,16 @@
 package main
 
 import (
+	"context"
 	"github.com/HeadGardener/books-webAPI/internal/app/handlers"
 	"github.com/HeadGardener/books-webAPI/internal/app/repository"
 	"github.com/HeadGardener/books-webAPI/internal/app/service"
 	"github.com/HeadGardener/books-webAPI/internal/pkg/server"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func main() {
@@ -28,8 +32,27 @@ func main() {
 	handler := handlers.NewHandler(services)
 
 	srv := &server.Server{}
-	if err := srv.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
-		logrus.Fatalf("issue while running server: %s", err.Error())
+
+	go func() {
+		if err := srv.Run(viper.GetString("port"), handler.InitRoutes()); err != nil {
+			logrus.Fatalf("issue while running server: %s", err.Error())
+		}
+	}()
+
+	logrus.Println("starting server...")
+
+	osSignCh := make(chan os.Signal, 1)
+	signal.Notify(osSignCh, syscall.SIGTERM, syscall.SIGINT)
+	<-osSignCh
+
+	logrus.Println("stopping server...")
+
+	if err := srv.Shutdown(context.Background()); err != nil {
+		logrus.Errorf("error while server shutdown: %s", err.Error())
+	}
+
+	if err := db.Close(); err != nil {
+		logrus.Errorf("error while closing db connection: %s", err.Error())
 	}
 }
 
