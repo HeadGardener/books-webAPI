@@ -13,6 +13,10 @@ type Authorization interface {
 
 type BookInterface interface {
 	CreateBook(userID int, book models.Book) (int, error)
+	GetAllBooks(userID int) ([]models.Book, error)
+	GetBookByID(userID, bookID int) (models.Book, error)
+	UpdateBook(userID, bookID int, bookInput models.BookInput) error
+	DeleteBook(userID, bookID int) error
 }
 
 type Service struct {
