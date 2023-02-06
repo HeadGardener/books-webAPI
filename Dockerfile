@@ -5,6 +5,8 @@ ENV GOPATH=/
 
 COPY ./ ./
 
+
+# build go app
 RUN go mod download
 RUN go build -o books-webAPI ./cmd/main.go
 
